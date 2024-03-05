@@ -1,0 +1,67 @@
+/* OutSports Title */
+.title2 {
+  text-align: center;
+  position: absolute;
+  top: 0;
+  font-size: 4.5em;
+  font-family: "Apple Chancery", cursive;
+  background: linear-gradient(to right, #e4e2df, #ffffff, #6c97d9, #94edff);
+  color: transparent;
+  background-clip: text;
+}
+
+.apple-icon {
+  height: 1.5rem;
+  width: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+#iconsLogin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -25rem;
+}
+
+#iconsLogin button {
+  margin-top: 5%;
+  width: 100% !important;
+}
+
+body {
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#background-image {
+  position: fixed;
+  opacity: 0.6;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+#rectangle {
+  background-image: url("../img/washify.png");
+  position: absolute;
+  background-position: center;
+  background-size: cover;
+  width: 30%;
+  height: 95%;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 1;
+}
