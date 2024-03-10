@@ -20,6 +20,16 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
+### Backoffice
+
+In order to configure the authentication API, run the following command:
+
+```bash
+python3 backoffice.py
+```
+
+Now open the backoffice in your browser at `http://127.0.0.1:5001/` and configure the authentication API with the authentication providers you wish.
+
 ### Run the Application
 
 In order to run the application, run the following command:
@@ -28,6 +38,7 @@ In order to run the application, run the following command:
 python3 iamService.py
 ```
 
-Now open the application in your browser at `http://127.0.0.1:5000/` and you should see the following page:
+Now open the application in your browser at `http://127.0.0.1:5000/`.
 
-![Google Login](static/a.png)
+
+
