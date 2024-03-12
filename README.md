@@ -28,7 +28,7 @@ In order to configure the authentication API, run the following command:
 python3 backoffice.py
 ```
 
-Now open the backoffice in your browser at `http://127.0.0.1:5001/` and configure the authentication API with the authentication providers you wish.
+Now open the backoffice in your browser at `http://127.0.0.1:5002/` and configure the authentication API with the authentication providers you wish.
 
 ### Run the Application
 
@@ -41,4 +41,6 @@ python3 iamService.py
 Now open the application in your browser at `http://127.0.0.1:5000/`.
 
 
+## QUESTION
+se o user escolhe apenas google e github, ao verificar o swagger ui ele deve ver todos os métodos dos provedores ou apenas os escolhidos?
 

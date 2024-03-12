@@ -9,7 +9,31 @@ from linkedin_auth import linkedin_login, linkedin_authorized, linkedin_success
 import os, json
 
 app = Flask("IAM Washify App", template_folder="templates", static_folder="static")
+
+SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
+API_URL = '/static/washifyIAM.json'  # Our API url (can of course be a local resource)
+
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,  # Swagger UI static files will be mapped to '{SWAGGER_URL}/dist/'
+    API_URL,
+    config={  # Swagger UI config overrides
+        'app_name': "IAM Washify App"
+    },
+    # oauth_config={  # OAuth config. See https://github.com/swagger-api/swagger-ui#oauth2-configuration .
+    #    'clientId': "your-client-id",
+    #    'clientSecret': "your-client-secret-if-required",
+    #    'realm': "your-realms",
+    #    'appName': "your-app-name",
+    #    'scopeSeparator': " ",
+    #    'additionalQueryStringParams': {'test': "hello"}
+    # }
+)
+
+app.register_blueprint(swaggerui_blueprint)
+
 api = Api(app)
+
+
 
 app.secret_key = "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"
 
@@ -90,7 +114,6 @@ def logout():
         del session["linkedin_user"]
     return redirect("/")
 
-# ... (other code)
 
 if __name__ == '__main__':
     app.run(debug=True)

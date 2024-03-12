@@ -50,6 +50,14 @@
         "description": "GitHub authentication",
         "url": "http://swagger.io"
       }
+    },
+    {
+      "name": "LinkedIn",
+      "description": "LinkedIn authentication",
+      "externalDocs": {
+        "description": "LinkedIn authentication",
+        "url": "http://swagger.io"
+      }
     }
   ],
   "paths": {
@@ -105,6 +113,39 @@
         "responses": {
           "200": {
             "description": "Successfully handled Google login callback"
+          }
+        }
+      }
+    },
+    "/login/linkedin": {
+      "get": {
+        "tags": ["LinkedIn"],
+        "summary": "Initiate LinkedIn login",
+        "responses": {
+          "200": {
+            "description": "Successfully initiated LinkedIn login"
+          }
+        }
+      }
+    },
+    "/login/linkedin/callback": {
+      "get": {
+        "tags": ["LinkedIn"],
+        "summary": "Handle LinkedIn login callback",
+        "responses": {
+          "200": {
+            "description": "Successfully handled LinkedIn login callback"
+          }
+        }
+      }
+    },
+    "/login/linkedin/success": {
+      "get": {
+        "tags": ["LinkedIn"],
+        "summary": "LinkedIn login success",
+        "responses": {
+          "200": {
+            "description": "Successfully completed LinkedIn login"
           }
         }
       }
