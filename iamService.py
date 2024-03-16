@@ -1,17 +1,16 @@
 # app.py
 from flask import Flask, render_template, jsonify, redirect, session
-from flask_restful import Api
 from flask_swagger_ui import get_swaggerui_blueprint
-from google_auth import google_login, google_callback, login_is_required, protected_area
-from github_auth import github_login, get_github_oauth_token, github_authorized, github_success, github
-from linkedin_auth import linkedin_login, linkedin_authorized, linkedin_success
-
+from providers.linkedin.linkedin_auth import *
+from providers.github.github_auth import *
+from providers.google.google_auth import *
+from flask_restful import Api
 import os, json
 
-app = Flask("IAM Washify App", template_folder="templates", static_folder="static")
+app = Flask("IAM Washify App", template_folder="static/templates", static_folder="static")
 
-SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
-API_URL = '/static/washifyIAM.json'  # Our API url (can of course be a local resource)
+SWAGGER_URL = '/api/docs'  
+API_URL = '/static/washifyIAM.json'  
 
 swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,  # Swagger UI static files will be mapped to '{SWAGGER_URL}/dist/'
@@ -39,8 +38,9 @@ app.secret_key = "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"
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" 
 
-config_file = 'config.json'
+config_file = 'backoffice/config.json'
 
+## configuration given from backoffice
 def load_config():
     try:
         with open(config_file, 'r') as file:
@@ -50,9 +50,12 @@ def load_config():
 
 config = load_config()
 
+
+# HOME
 @app.route('/')
 def welcome():
     return render_template('login.html', enabled_providers=config)
+
 
 # GITHUB LOGIN
 @app.route('/login/github', methods=["GET", "POST"])
@@ -70,6 +73,7 @@ def github_authorized_route():
 @app.route('/login/github/success')
 def github_success_route():
     return github_success()
+
 
 # GOOGLE LOGIN    
 @app.route("/login/google", methods=["GET", "POST"])
