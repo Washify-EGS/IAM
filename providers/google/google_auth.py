@@ -1,9 +1,10 @@
 # google_auth.py
 from flask import redirect, session, abort, request
-from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 import google.auth.transport.requests
+from google.oauth2 import id_token
+from db import insert_user
 import requests
 import os
 import pathlib
@@ -59,4 +60,8 @@ def login_is_required(function):
     return wrapper
 
 def protected_area():
+    print(f"Name: " + session["name"])
+    print(f"Google ID: " + session["google_id"])
+    
+    insert_user(session["name"], google_id=session["google_id"])
     return f"Hello {session['name']}! <br/> <a href='/logout'><button>Logout</button></a>"

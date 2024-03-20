@@ -5,9 +5,11 @@ from providers.linkedin.linkedin_auth import *
 from providers.github.github_auth import *
 from providers.google.google_auth import *
 from flask_restful import Api
+
 import os, json
 
 app = Flask("IAM Washify App", template_folder="static/templates", static_folder="static")
+app.secret_key = "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"
 
 SWAGGER_URL = '/api/docs'  
 API_URL = '/static/washifyIAM.json'  
@@ -31,8 +33,6 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 app.register_blueprint(swaggerui_blueprint)
 
 api = Api(app)
-
-
 
 app.secret_key = "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"
 
@@ -117,6 +117,7 @@ def logout():
         print("Logging out the user from LinkedIn")
         del session["linkedin_user"]
     return redirect("/")
+
 
 
 if __name__ == '__main__':

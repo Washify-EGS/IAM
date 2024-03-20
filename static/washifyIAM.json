@@ -138,17 +138,6 @@
           }
         }
       }
-    },
-    "/login/linkedin/success": {
-      "get": {
-        "tags": ["LinkedIn"],
-        "summary": "LinkedIn login success",
-        "responses": {
-          "200": {
-            "description": "Successfully completed LinkedIn login"
-          }
-        }
-      }
     }
   },
   "components": {}

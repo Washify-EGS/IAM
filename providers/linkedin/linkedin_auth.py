@@ -1,5 +1,6 @@
 from flask import redirect, session, url_for, request
 from flask_oauthlib.client import OAuth
+from db import insert_user
 
 # linkedin auth
 oauth = OAuth()
@@ -25,14 +26,20 @@ def linkedin_login():
 def get_linkedin_oauth_token():
     return session.get('linkedin_token')
 
-
-def linkedin_authorized():
-    resp = linkedin.authorized_response()
-    if resp is None or resp.get('access_token') is None:
-        return 'Access denied: reason={} error={}'.format(
-            request.args['error_reason'],
+@linkedin.authorized_handler
+def linkedin_authorized(resp):
+    if isinstance(resp, Exception):
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error'],
             request.args['error_description']
         )
+    
+    if resp is None or resp.get('access_token') is None:
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error'],
+            request.args['error_description']
+        )
+    
     session['linkedin_token'] = (resp['access_token'], '')
 
     # Fetch user information using v2 API
@@ -45,4 +52,11 @@ def linkedin_authorized():
 
 def linkedin_success():
     print(f"Linkedin user: {session['linkedin_user']}")
+    # print linkedin user token or id
+    linkedin_token = session['linkedin_token'][0][:41]  # Maximum length allowed
+    print(f"Linkedin token: {linkedin_token}")
+    
+    # insert Linkedin user into the database
+    insert_user(session['linkedin_user'], linkedin_id=linkedin_token)
     return f"Hello {session['linkedin_user']}! <br/> <a href='/logout'><button>Logout</button></a>"
+

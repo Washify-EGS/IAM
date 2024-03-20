@@ -1,13 +1,14 @@
 # github_auth.py
-from flask import redirect, session, url_for
+from flask import redirect, request, session, url_for
 from flask_oauthlib.client import OAuth
+from db import insert_user
 
 oauth = OAuth()
 
 github = oauth.remote_app(
     'github',
-    consumer_key='f4e1a30e7adeb06aab7c',
-    consumer_secret='d91ea7eb81393aee44b6e4b9315cafc79916eeb2',
+    consumer_key='084e782051652dc61b58',
+    consumer_secret='9b482b565e25f5d48368736f85e50ac1eb09a482',
     request_token_params=None,
     base_url='https://api.github.com/',
     request_token_url=None,
@@ -16,24 +17,26 @@ github = oauth.remote_app(
     authorize_url='https://github.com/login/oauth/authorize',
 )
 
+@github.authorized_handler
+def github_authorized(resp):
+    if resp is None or resp.get('access_token') is None:
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error'],
+            request.args['error_description']
+        )
+    session['github_token'] = (resp['access_token'], '')
+    me = github.get('user')
+    session['github_user'] = me.data['login']
+    return redirect(url_for('github_success_route'))
+
 def github_login():
     return github.authorize(callback=url_for('github_authorized_route', _external=True))
 
 def get_github_oauth_token():
     return session.get('github_token')
 
-def github_authorized():
-    response = github.authorized_response()
-
-    if response is None or response.get('access_token') is None:
-        return redirect(url_for('welcome'))
-
-    session['github_token'] = (response['access_token'], '')
-
-    user_info = github.get('user')
-    session['github_user'] = user_info.data['login']
-
-    return redirect(url_for('github_success_route'))
-
-def github_success():
+def github_success():    
+    # insert Github user into the database
+    insert_user(session['github_user'], github_id=session['github_token'][0])
+    
     return f"Hello {session['github_user']}! <br/> <a href='/logout'><button>Logout</button></a>"

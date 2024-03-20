@@ -1,10 +1,10 @@
 import json
 from flask import Flask, render_template, request, redirect
 
-app = Flask("IAM Service Back Office", template_folder="../static/templates", static_folder="../static")
+app = Flask("IAM Backoffice API", template_folder="static/templates", static_folder="static")
 
 # Keep track of enabled authentication providers
-config_file = 'config.json'
+config_file = 'backoffice/config.json'
 
 def load_config():
     try:
@@ -33,6 +33,10 @@ def configure():
         save_config(enabled_providers)
 
     return redirect('/')
+
+@app.route('/providers')
+def providers():
+    return enabled_providers
 
 if __name__ == '__main__':
     app.run(debug=True, port=5002)
