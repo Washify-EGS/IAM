@@ -16,7 +16,17 @@ def create_database(cursor):
 
 def create_users_table(cursor):
     # Create users table
-    cursor.execute("CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255) NOT NULL, github_id VARCHAR(255), linkedin_id VARCHAR(512), google_id VARCHAR(512), email VARCHAR(255), last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)")
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INT AUTO_INCREMENT PRIMARY KEY, 
+            username VARCHAR(255) NOT NULL, 
+            github_id VARCHAR(255), 
+            linkedin_id VARCHAR(512), 
+            google_id VARCHAR(512), 
+            email VARCHAR(255), 
+            last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )
+    """)
 
 def connect_to_database():
     mydb = connect_to_mysql()

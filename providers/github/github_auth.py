@@ -43,3 +43,12 @@ def github_success():
     insert_user(session['github_user'], github_id=session['github_token'][0], email=f"{session['github_email']}")
     
     return f"Hello {session['github_user']}! <br/> <a href='/logout'><button>Logout</button></a>"
+
+# get user information
+def get_user_info():
+    return {
+        "name": session["github_user"],
+        "email": session["github_email"],
+        "github_id": session["github_token"][0]
+    }
+    

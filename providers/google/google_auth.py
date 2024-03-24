@@ -68,3 +68,12 @@ def protected_area():
     
     insert_user(session["name"], google_id=session["google_id"], email=session["email"])
     return f"Hello {session['name']}! <br/> <a href='/logout'><button>Logout</button></a>"
+
+
+# send user information
+def get_user_info():
+    return {
+        "name": session["name"],
+        "email": session["email"],
+        "google_id": session["google_id"]
+    }

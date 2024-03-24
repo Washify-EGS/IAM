@@ -74,6 +74,11 @@ def github_authorized_route():
 def github_success_route():
     return github_success()
 
+# get github user info
+@app.route('/githubuser')
+def get_github_user():
+    return jsonify(get_user_info())
+
 
 # GOOGLE LOGIN    
 @app.route("/login/google", methods=["GET", "POST"])
@@ -89,6 +94,11 @@ def google_callback_route():
 def google_protected_area():
     return protected_area()
 
+# get google user info
+@app.route('/googleuser')
+def get_google_user():
+    return jsonify(get_user_info())
+
 
 # LINKEDIN LOGIN
 @app.route("/login/linkedin", methods=["GET", "POST"])
@@ -103,6 +113,10 @@ def linkedin_authorized_route():
 @app.route("/login/linkedin/success")
 def linkedin_success_route():
     return linkedin_success()
+
+@app.route('/linkedinuser')
+def get_linkedin_user():
+    return jsonify(get_user_info())
 
 
 @app.route('/logout')

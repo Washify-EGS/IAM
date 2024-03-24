@@ -62,4 +62,12 @@ def linkedin_success():
     insert_user(session['linkedin_user'], linkedin_id=linkedin_token, email=session['linkedin_email'])
     return f"Hello {session['linkedin_user']}! <br/> <a href='/logout'><button>Logout</button></a>"
 
+# get user information
+def get_user_info():
+    return {
+        "name": session["linkedin_user"],
+        "email": session["linkedin_email"],
+        "linkedin_id": session["linkedin_token"][0]
+    }
+
 
