@@ -47,16 +47,19 @@ def linkedin_authorized(resp):
     print(me.data)
     name = me.data.get('name', '')
     session['linkedin_user'] = f"{name}"
+    session['linkedin_email'] = me.data.get('email', '')
     
     return redirect(url_for('linkedin_success_route'))
 
 def linkedin_success():
     print(f"Linkedin user: {session['linkedin_user']}")
     # print linkedin user token or id
-    linkedin_token = session['linkedin_token'][0][:41]  # Maximum length allowed
+    linkedin_token = session['linkedin_token'][0][:41]  
     print(f"Linkedin token: {linkedin_token}")
+    print(f"Linkedin email: {session['linkedin_email']}")
     
     # insert Linkedin user into the database
-    insert_user(session['linkedin_user'], linkedin_id=linkedin_token)
+    insert_user(session['linkedin_user'], linkedin_id=linkedin_token, email=session['linkedin_email'])
     return f"Hello {session['linkedin_user']}! <br/> <a href='/logout'><button>Logout</button></a>"
+
 

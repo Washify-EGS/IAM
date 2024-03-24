@@ -46,6 +46,8 @@ def google_callback():
 
         session["google_id"] = id_info.get("sub")
         session["name"] = id_info.get("name")
+        session["email"] = id_info.get("email")
+        
         return redirect("/login/google/success")
     except Exception as e:
         raise
@@ -61,7 +63,8 @@ def login_is_required(function):
 
 def protected_area():
     print(f"Name: " + session["name"])
-    print(f"Google ID: " + session["google_id"])
+    print(f"Google ID: " + session["google_id"][:21])
+    print(f"Email: " + session["email"])
     
-    insert_user(session["name"], google_id=session["google_id"])
+    insert_user(session["name"], google_id=session["google_id"], email=session["email"])
     return f"Hello {session['name']}! <br/> <a href='/logout'><button>Logout</button></a>"
