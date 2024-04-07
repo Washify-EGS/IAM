@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import mysql.connector
 import logging
 
@@ -63,5 +63,22 @@ def insert_user(username, github_id=None, linkedin_id=None, google_id=None, emai
     finally:
         mydb.close()
 
+def get_last_logged_in_user():
+    mydb = connect_to_database()
+    cursor = mydb.cursor(dictionary=True)
 
-connect_to_database()
+    try:
+        # Calculate the timestamp 30 seconds ago
+        thirty_seconds_ago = datetime.now() - timedelta(seconds=30)
+        
+        # Execute the SQL query with the WHERE clause to filter records
+        cursor.execute("SELECT * FROM users WHERE last_login >= %s ORDER BY last_login DESC LIMIT 1", (thirty_seconds_ago,))
+        
+        # Fetch the user data
+        user = cursor.fetchone()
+        print(f"Last logged-in user: {user}")
+        return user
+    except Exception as e:
+        logging.error(f"Error fetching last logged-in user: {e}")
+    finally:
+        mydb.close()

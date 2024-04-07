@@ -5,11 +5,12 @@ from providers.linkedin.linkedin_auth import *
 from providers.github.github_auth import *
 from providers.google.google_auth import *
 from flask_restful import Api
+from db import get_last_logged_in_user
 
 import os, json
+import jwt
 
 app = Flask("IAM Washify App", template_folder="static/templates", static_folder="static")
-app.secret_key = "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"
 
 SWAGGER_URL = '/api/docs'  
 API_URL = '/static/washifyIAM.json'  
@@ -74,12 +75,6 @@ def github_authorized_route():
 def github_success_route():
     return github_success()
 
-# get github user info
-@app.route('/githubuser')
-def get_github_user():
-    return jsonify(get_user_info())
-
-
 # GOOGLE LOGIN    
 @app.route("/login/google", methods=["GET", "POST"])
 def google_login_route():
@@ -93,12 +88,6 @@ def google_callback_route():
 @login_is_required
 def google_protected_area():
     return protected_area()
-
-# get google user info
-@app.route('/googleuser')
-def get_google_user():
-    return jsonify(get_user_info())
-
 
 # LINKEDIN LOGIN
 @app.route("/login/linkedin", methods=["GET", "POST"])
@@ -114,9 +103,12 @@ def linkedin_authorized_route():
 def linkedin_success_route():
     return linkedin_success()
 
-@app.route('/linkedinuser')
-def get_linkedin_user():
-    return jsonify(get_user_info())
+# get user info
+@app.route('/userinfo')
+def get_user_info():
+    user = get_last_logged_in_user()  # Call the function to fetch users from the database
+    token = generate_jwt_token(user)
+    return jsonify({'token': token})  # Return the users as JSON response
 
 
 @app.route('/logout')
@@ -132,7 +124,23 @@ def logout():
         del session["linkedin_user"]
     return redirect("/")
 
+def generate_jwt_token(user_info):
+    if user_info:
+        payload = {
+            'id': None,
+            'name': user_info['username'], 
+            'email': user_info['email']
+        }
+        
+        for id_type in ['google_id', 'github_id', 'linkedin_id']:
+            if user_info[id_type] is not None:
+                payload['id'] = user_info[id_type]
+                break
 
+        jwt_token = jwt.encode(payload, app.secret_key, algorithm='HS256')
+        return jwt_token
+    else:
+        return None
 
 if __name__ == '__main__':
     app.run(debug=True)
