@@ -59,7 +59,7 @@ def linkedin_success():
     print(f"Linkedin email: {session['linkedin_email']}")
     
     # insert Linkedin user into the database
-    insert_user(session['linkedin_user'], linkedin_id=linkedin_token, email=session['linkedin_email'])
+    # insert_user(session['linkedin_user'], linkedin_id=linkedin_token, email=session['linkedin_email'])
     return f"Hello {session['linkedin_user']}! <br/> <a href='/logout'><button>Logout</button></a>"
 
 # get user information

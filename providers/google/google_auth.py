@@ -18,7 +18,7 @@ client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret
 flow = Flow.from_client_secrets_file(
     client_secrets_file=client_secrets_file,
     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri="http://127.0.0.1:5000/login/google/callback"
+    redirect_uri="http://localhost:8000/login/google/callback"
 )
 
 def google_login():
@@ -66,7 +66,7 @@ def protected_area():
     print(f"Google ID: " + session["google_id"][:21])
     print(f"Email: " + session["email"])
     
-    insert_user(session["name"], google_id=session["google_id"], email=session["email"])
+    # insert_user(session["name"], google_id=session["google_id"], email=session["email"])
     return f"Hello {session['name']}! <br/> <a href='/logout'><button>Logout</button></a>"
 
 

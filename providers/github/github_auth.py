@@ -40,7 +40,7 @@ def get_github_oauth_token():
 def github_success():    
     print(f"Github email: {session['github_email']}")
     # insert Github user into the database
-    insert_user(session['github_user'], github_id=session['github_token'][0], email=f"{session['github_email']}")
+    # insert_user(session['github_user'], github_id=session['github_token'][0], email=f"{session['github_email']}")
     
     return f"Hello {session['github_user']}! <br/> <a href='/logout'><button>Logout</button></a>"
 
