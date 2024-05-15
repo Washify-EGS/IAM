@@ -9,6 +9,7 @@ import requests
 import os
 import pathlib
 import ssl
+import jwt
 
 ssl._create_default_https_context = ssl._create_stdlib_context
 
@@ -62,18 +63,10 @@ def login_is_required(function):
     return wrapper
 
 def protected_area():
-    print(f"Name: " + session["name"])
-    print(f"Google ID: " + session["google_id"][:21])
-    print(f"Email: " + session["email"])
-    
-    # insert_user(session["name"], google_id=session["google_id"], email=session["email"])
-    return f"Hello {session['name']}! <br/> <a href='/logout'><button>Logout</button></a>"
+    # Encode the query parameters into a JWT token
+    payload = {'username': session['name'], 'id': session['google_id'][:21]}
+    encoded_token = jwt.encode(payload, 'secret_key', algorithm='HS256')
 
-
-# send user information
-def get_user_info():
-    return {
-        "name": session["name"],
-        "email": session["email"],
-        "google_id": session["google_id"]
-    }
+    # Redirect back to Flutter app with the JWT token
+    redirect_url = f'http://localhost:8080/welcome?token={encoded_token}'
+    return redirect(redirect_url)

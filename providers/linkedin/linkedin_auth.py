@@ -1,6 +1,7 @@
 from flask import redirect, session, url_for, request
 from flask_oauthlib.client import OAuth
 from db import insert_user
+import jwt
 
 # linkedin auth
 oauth = OAuth()
@@ -46,28 +47,20 @@ def linkedin_authorized(resp):
     me = linkedin.get('https://api.linkedin.com/v2/userinfo')
     print(me.data)
     name = me.data.get('name', '')
+    linkedin_id = me.data.get('id', '')
     session['linkedin_user'] = f"{name}"
+    session['linkedin_id'] = f"{linkedin_id}"
     session['linkedin_email'] = me.data.get('email', '')
     
     return redirect(url_for('linkedin_success_route'))
 
 def linkedin_success():
-    print(f"Linkedin user: {session['linkedin_user']}")
-    # print linkedin user token or id
-    linkedin_token = session['linkedin_token'][0][:41]  
-    print(f"Linkedin token: {linkedin_token}")
-    print(f"Linkedin email: {session['linkedin_email']}")
-    
-    # insert Linkedin user into the database
-    # insert_user(session['linkedin_user'], linkedin_id=linkedin_token, email=session['linkedin_email'])
-    return f"Hello {session['linkedin_user']}! <br/> <a href='/logout'><button>Logout</button></a>"
+    # Encode the query parameters into a JWT token
+    payload = {'username': session['linkedin_user'], 'id': session['linkedin_id']}
+    encoded_token = jwt.encode(payload, 'secret_key', algorithm='HS256')
 
-# get user information
-def get_user_info():
-    return {
-        "name": session["linkedin_user"],
-        "email": session["linkedin_email"],
-        "linkedin_id": session["linkedin_token"][0]
-    }
+    # Redirect back to Flutter app with the JWT token
+    redirect_url = f'http://localhost:8080/welcome?token={encoded_token}'
+    return redirect(redirect_url)
 
 

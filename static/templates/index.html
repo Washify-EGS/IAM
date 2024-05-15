@@ -1,35 +1,77 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Authentication Providers Configuration</title>
+    <style>
+      /* Center the container horizontally and vertically */
+      body, html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      /* Style the container */
+      .container {
+        width: 300px; /* Adjust the width as needed */
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+      }
+      
+      /* Style the form */
+      form {
+        margin-top: 20px; /* Add margin between the title and the form */
+      }
+      
+      /* Style the h1 and h2 */
+      h1, h2 {
+        text-align: center;
+      }
+      
+      /* Style the checkboxes */
+      input[type="checkbox"] {
+        margin-right: 5px;
+      }
+      
+      /* Style the button */
+      button {
+        margin-top: 10px;
+        width: 100%; /* Make the button full width */
+        padding: 10px 0; /* Add padding to the button */
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
-    <h1>Authentication Providers Configuration</h1>
+    <div class="container">
+      <h1>Authentication Providers Configuration</h1>
 
-    <form method="POST" action="{{ url_for('configure') }}">
-      <h2>Available Providers:</h2>
-      {% for provider, enabled in enabled_providers.items() %}
-      <label for="{{ provider }}">
-        <input
-          type="checkbox"
-          id="{{ provider }}"
-          name="{{ provider }}_enabled"
-          {%
-          if
-          enabled
-          %}checked{%
-          endif
-          %}
-        />
-        {{ provider.capitalize() }}
-      </label>
-      <br />
-      {% endfor %}
-      <br />
-      <button type="submit">Update Configuration</button>
-    </form>
+      <form method="POST" action="{{ url_for('configure') }}">
+        <h2>Available Providers:</h2>
+        {% for provider, enabled in enabled_providers.items() %}
+        <label for="{{ provider }}">
+          <input
+            type="checkbox"
+            id="{{ provider }}"
+            name="{{ provider }}_enabled"
+            {% if enabled %}checked{% endif %}
+          />
+          {{ provider.capitalize() }}
+        </label>
+        <br />
+        {% endfor %}
+        <br />
+        <button type="submit">Update Configuration</button>
+      </form>
+    </div>
   </body>
 </html>

@@ -2,6 +2,7 @@
 from flask import redirect, request, session, url_for
 from flask_oauthlib.client import OAuth
 from db import insert_user
+import jwt
 
 oauth = OAuth()
 
@@ -28,6 +29,7 @@ def github_authorized(resp):
     me = github.get('user')
     session['github_user'] = me.data['login']
     session['github_email'] = me.data['email']
+    session['github_userid'] = str(me.data['id'])
     
     return redirect(url_for('github_success_route'))
 
@@ -38,17 +40,11 @@ def get_github_oauth_token():
     return session.get('github_token')
 
 def github_success():    
-    print(f"Github email: {session['github_email']}")
-    # insert Github user into the database
-    # insert_user(session['github_user'], github_id=session['github_token'][0], email=f"{session['github_email']}")
-    
-    return f"Hello {session['github_user']}! <br/> <a href='/logout'><button>Logout</button></a>"
+    # Encode the query parameters into a JWT token
+    payload = {'username': session['github_user'], 'id': session['github_userid']}
+    encoded_token = jwt.encode(payload, 'secret_key', algorithm='HS256')
 
-# get user information
-def get_user_info():
-    return {
-        "name": session["github_user"],
-        "email": session["github_email"],
-        "github_id": session["github_token"][0]
-    }
+    # Redirect back to Flutter app with the JWT token
+    redirect_url = f'http://localhost:8080/welcome?token={encoded_token}'
+    return redirect(redirect_url)
     

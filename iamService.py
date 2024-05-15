@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, render_template, jsonify, redirect, session
+from flask import Flask, render_template, redirect, session
 from flask_swagger_ui import get_swaggerui_blueprint
 from providers.linkedin.linkedin_auth import *
 from providers.github.github_auth import *
@@ -8,7 +8,6 @@ from flask_restful import Api
 from db import get_last_logged_in_user
 
 import os, json
-import jwt
 
 app = Flask("IAM Washify App", template_folder="static/templates", static_folder="static")
 
@@ -49,13 +48,11 @@ def load_config():
     except FileNotFoundError:
         return {'google': True, 'github': True, 'linkedin': True}
 
-config = load_config()
-
 
 # HOME
 @app.route('/')
 def welcome():
-    return render_template('login.html', enabled_providers=config)
+    return render_template('login.html', enabled_providers=load_config())
 
 
 # GITHUB LOGIN
@@ -103,14 +100,6 @@ def linkedin_authorized_route():
 def linkedin_success_route():
     return linkedin_success()
 
-# get user info
-@app.route('/userinfo')
-def get_user_info():
-    user = get_last_logged_in_user()  # Call the function to fetch users from the database
-    token = generate_jwt_token(user)
-    return jsonify({'token': token})  # Return the users as JSON response
-
-
 @app.route('/logout')
 def logout():
     if "google_id" in session:
@@ -124,25 +113,7 @@ def logout():
         del session["linkedin_user"]
     return redirect("/")
 
-def generate_jwt_token(user_info):
-    if user_info:
-        payload = {
-            'id': None,
-            'name': user_info['username'], 
-            'email': user_info['email']
-        }
-        
-        for id_type in ['google_id', 'github_id', 'linkedin_id']:
-            if user_info[id_type] is not None:
-                payload['id'] = user_info[id_type]
-                break
-
-        jwt_token = jwt.encode(payload, app.secret_key, algorithm='HS256')
-        return jwt_token
-    else:
-        return None
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='localhost', port='8000', debug=True)
 
 
