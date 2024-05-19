@@ -5,7 +5,6 @@ from providers.linkedin.linkedin_auth import *
 from providers.github.github_auth import *
 from providers.google.google_auth import *
 from flask_restful import Api
-from db import get_last_logged_in_user
 
 import os, json
 
@@ -114,6 +113,6 @@ def logout():
     return redirect("/")
 
 if __name__ == '__main__':
-    app.run(host='localhost', port='8000', debug=True)
+    app.run(host='0.0.0.0', port='8000')
 
 

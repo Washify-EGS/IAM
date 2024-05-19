@@ -4,7 +4,6 @@ from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 import google.auth.transport.requests
 from google.oauth2 import id_token
-from db import insert_user
 import requests
 import os
 import pathlib

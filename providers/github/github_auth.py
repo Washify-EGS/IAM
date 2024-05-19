@@ -1,7 +1,6 @@
 # github_auth.py
 from flask import redirect, request, session, url_for
 from flask_oauthlib.client import OAuth
-from db import insert_user
 import jwt
 
 oauth = OAuth()

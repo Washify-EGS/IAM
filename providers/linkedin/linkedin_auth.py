@@ -1,6 +1,5 @@
 from flask import redirect, session, url_for, request
 from flask_oauthlib.client import OAuth
-from db import insert_user
 import jwt
 
 # linkedin auth

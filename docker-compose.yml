@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  iam_service:
+    build:
+      context: .
+      dockerfile: Dockerfile.iamService
+    ports:
+      - "8000:8000"
+    environment:
+      - NAME=iam_washify
+    volumes:
+      - .:/app
+
+  back_office:
+    build:
+      context: .
+      dockerfile: Dockerfile.backOffice
+    ports:
+      - "5002:5002"
+    environment:
+      - NAME=iam_backoffice
+    volumes:
+      - .:/app
