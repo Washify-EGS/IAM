@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Authentication Providers Configuration</title>
+    <title>{% block title %}BackOffice{% endblock %}</title>
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='img/icon.png') }}"
+      type="image/x-icon"
+    />
     <style>
       /* Center the container horizontally and vertically */
       body, html {
